@@ -9,51 +9,37 @@ namespace GestorProductosPedroMiranda.Controllers
 {
     public class ProductoController
     {
-        private List<Producto> _productos = new List<Producto>();
-        private int _siguienteId = 1;
+        private readonly IRepository<Producto> _repo;
+
+        public ProductoController(IRepository<Producto> repo)
+        {
+            _repo = repo;
+        }
 
         public void Agregar(string nombre, int stock, decimal precio)
         {
+            //el Id no se asigna aca, lo calcula el repositorio en Agregar()
             var producto = new Producto
             {
-                Id = _siguienteId++,
                 Nombre = nombre,
                 Stock = stock,
                 Precio = precio
             };
-            _productos.Add(producto);
+            _repo.Agregar(producto);
         }
 
-        public List<Producto> ObtenerTodos()
-        {
-            return _productos;
-        }
+        public List<Producto> ObtenerTodos() => _repo.LeerTodos();
 
-        //elimina de la lista el producto que tenga ese id
-        //el RemoveAll borra todos los elementos que cumplan la condicion
-        public void Eliminar(int id)
-        {
-            _productos.RemoveAll(p => p.Id == id);
-        }
+        public void Eliminar(int id) => _repo.Eliminar(id);
 
-        //busca el producto por id dentro de la lista y actualiza sus datos con los valores modificados
-        public void Modificar(Producto modificado)
-        {
-            var p = _productos.Find(x => x.Id == modificado.Id);
-            if (p == null) return; // por si no lo encuentra
+        public void Modificar(Producto modificado) => _repo.Actualizar(modificado);
 
-            p.Nombre = modificado.Nombre;
-            p.Stock = modificado.Stock;
-            p.Precio = modificado.Precio;
-        }
-
-        //devuelve los productos donde el nombre contenga el texto buscado - si el texto esta vacio, devuelve todos
         public List<Producto> Buscar(string texto)
         {
             if (string.IsNullOrWhiteSpace(texto))
-                return _productos;
+                return _repo.LeerTodos();
 
-            return _productos
+            return _repo.LeerTodos()
                 .Where(p => p.Nombre.ToLower().Contains(texto.ToLower()))
                 .ToList();
         }

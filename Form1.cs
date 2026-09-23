@@ -20,13 +20,6 @@ namespace GestorProductosPedroMiranda
             InitializeComponent();
             _controller = controller;
 
-            //productos de ejemplo precargados
-            _controller.Agregar("Mouse Gamer RGB", 2, 15000);
-            _controller.Agregar("Teclado Mecanico", 7, 45000);
-            _controller.Agregar("Monitor 24 pulgadas", 15, 180000);
-            _controller.Agregar("Auriculares Bluetooth", 25, 32000);
-            _controller.Agregar("Webcam Full HD", 0, 28000);
-
             //el grid mira al BindingSource, no directamente a la lista
             dgvProductos.DataSource = _bindingSource;
 
@@ -53,7 +46,7 @@ namespace GestorProductosPedroMiranda
                 return;
             }
 
-            //validacion - el stock tiene que ser un numero entero y no negativo
+            //validacion, el stock tiene que ser un numero entero y no negativo
             if (!int.TryParse(txtStock.Text, out int stock) || stock < 0)
             {
                 MessageBox.Show("Stock invalido.");
@@ -61,7 +54,7 @@ namespace GestorProductosPedroMiranda
                 return;
             }
 
-            //validacion - el precio tiene que ser un decimal y mayor a 0
+            //validacion, el precio tiene que ser un decimal y mayor a 0
             if (!decimal.TryParse(txtPrecio.Text, out decimal precio) || precio <= 0)
             {
                 MessageBox.Show("Precio invalido.");
@@ -69,7 +62,7 @@ namespace GestorProductosPedroMiranda
                 return;
             }
 
-            //bifurcacion - segun el modo, actualiza o crea
+            //bifurcacion, segun el modo, actualiza o crea
             if (_modoEdicion)
             {
                 //modifica el objeto que ya esta en la lista
@@ -278,7 +271,5 @@ namespace GestorProductosPedroMiranda
                 fila.DefaultCellStyle.SelectionForeColor = System.Drawing.Color.Black;
             }
         }
-
-
     }
 }
